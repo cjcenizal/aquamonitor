@@ -12,7 +12,7 @@
     "underscore": "1.8.3"
   },
   "scripts": {
-    "clean": "rm -f -R build && mkdir build && mkdir -p build/{styles,scripts,assets} && mkdir -p build/assets{images,data}",
+    "clean": "rm -f -R build && mkdir build && mkdir -p build/{styles,scripts,assets} && mkdir -p build/assets/{images,data}",
     "css": "sass src/main.scss build/styles/main.css && postcss --use autoprefixer -o build/styles/main.css build/styles/main.css",
     "html": "jade src/index.jade --out build --pretty",
     "assets": "cp -r public/assets/* build/assets",
