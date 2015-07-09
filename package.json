@@ -14,7 +14,7 @@
   "scripts": {
     "clean": "rm -f -R build && mkdir build && mkdir -p build/{styles,scripts,assets} && mkdir -p build/assets{images,data}",
     "css": "sass src/main.scss build/styles/main.css && postcss --use autoprefixer -o build/styles/main.css build/styles/main.css",
-    "html": "cp src/index.html build/index.html",
+    "html": "jade src/index.jade --out build --pretty",
     "assets": "cp -r public/assets/* build/assets",
     "js": "browserify -t reactify src/main.js -o build/scripts/main.js",
     "build": "npm run clean && npm run assets && npm run js && npm run css && npm run html",

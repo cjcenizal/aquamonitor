@@ -9,5 +9,5 @@ var React = require('react');
 var App = require('./ui/App/App');
 React.render(
   <App />,
-  document.body
+  document.getElementById('waterQualityApp')
 );

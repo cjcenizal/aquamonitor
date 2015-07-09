@@ -1,0 +1,42 @@
+doctype html
+html(
+  lang = "en"
+)
+
+  head
+
+    title Department of Water Quality
+
+    //- Fonts
+    link(
+      href = "http://fonts.googleapis.com/css?family=Open+Sans:400,700,300"
+      rel = "stylesheet"
+      type = "text/css"
+    )
+
+    //- CSS
+    link(
+      href = "/styles/main.css"
+      rel = "stylesheet"
+      type = "text/css"
+    )
+
+  body
+
+    .header
+      .logo
+        | Department of water quality
+      .nav
+        .nav__item Home
+        .nav__item Locations
+        .nav__item Help
+
+    //- Location
+    h1 LA Aqueduct Filtration Plant
+
+    //- Water Quality app
+    #waterQualityApp
+
+    script(
+      src="/scripts/main.js"
+    )
