@@ -1,6 +1,6 @@
 'use strict';
 
-var ReadingsTableRow = require('./ReadingsTableRow');
+var SamplesTableRow = require('./SamplesTableRow');
 
 var React = require('react');
 var classNames = require('classnames');
@@ -16,7 +16,7 @@ module.exports = React.createClass({
           </tr>
         </thead>
         <tbody>
-          <ReadingsTableRow />
+          <SamplesTableRow />
         </tbody>
       </table>
     );

@@ -1,7 +1,7 @@
 'use strict';
 
 var Alert = require('../Alert/Alert');
-var Readings = require('../Readings/Readings');
+var Samples = require('../Samples/Samples');
 var AlertButton = require('../AlertButton/AlertButton');
 
 var React = require('react');
@@ -12,7 +12,7 @@ module.exports = React.createClass({
     return (
       <div>
         <Alert />
-        <Readings />
+        <Samples />
         <AlertButton />
       </div>
     );

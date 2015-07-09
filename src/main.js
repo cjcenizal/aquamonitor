@@ -3,7 +3,8 @@
 var React = require('react');
 
 // Define stores so they're available before the UI interacts with them.
-// TODO
+var SampleStore = require('./domain/Sample/SampleStore');
+var AlertStore = require('./domain/Alert/AlertStore');
 
 // Build + render app.
 var App = require('./ui/App/App');
