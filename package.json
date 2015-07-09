@@ -1,0 +1,23 @@
+{
+  "name": "aquamonitor",
+  "dependencies": {
+    "classnames": "2.1.1",
+    "flux": "2.0.3",
+    "jquery": "2.1.3",
+    "keymirror": "0.1.1",
+    "object-assign": "2.0.0",
+    "q": "1.3.0",
+    "react": "0.13.3",
+    "reactify": "1.1.0",
+    "underscore": "1.8.3"
+  },
+  "scripts": {
+    "clean": "rm -f -R build && mkdir build && mkdir -p build/{styles,scripts,assets} && mkdir -p build/assets{images,data}",
+    "css": "sass src/main.scss build/styles/main.css && postcss --use autoprefixer -o build/styles/main.css build/styles/main.css",
+    "html": "cp src/index.html build/index.html",
+    "assets": "cp -r public/assets/* build/assets",
+    "js": "browserify -t reactify src/main.js -o build/scripts/main.js",
+    "build": "npm run clean && npm run assets && npm run js && npm run css && npm run html",
+    "serve": "ws -d build"
+  }
+}
