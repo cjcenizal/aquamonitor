@@ -25,7 +25,12 @@ module.exports = React.createClass({
       <table>
         <thead>
           <tr>
-            <th>Head</th>
+            <th>Time</th>
+            <th title="chloroform">CHCl<sub>3</sub></th>
+            <th title="bromoform">CHBr<sub>3</sub></th>
+            <th title="bromodichloromethane">CHBrCl<sub>2</sub></th>
+            <th title="dibromochloromethane">CBr<sub>2</sub>Cl<sub>2</sub></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>

@@ -23833,8 +23833,21 @@ module.exports = new Dispatcher();
 function Sample(id, time, activeAlert, readings) {
   this.id = id;
   this.time = new Date(time);
+  var hours = this.time.getHours().toString();
+  if (hours.length == 1) {
+    hours = '0' + hours;
+  }
+  var minutes = this.time.getMinutes().toString();
+  if (minutes.length == 1) {
+    minutes = '0' + minutes;
+  }
+  this.clockTime = [hours, minutes].join(':');
   this.activeAlert = activeAlert;
   this.readings = readings;
+}
+
+Sample.prototype.getReadingFor = function(contaminant) {
+  return this.readings[contaminant];
 }
 
 module.exports = Sample;
@@ -23999,7 +24012,9 @@ function _getNextSample() {
   if (secondsElapsed >= THRESHOLD_SECONDS) {
     // Reset the timer and return the next sample.
     _startTime = new Date();
-    return sampleData[_sampleIndex++];
+    if (sampleData[_sampleIndex]) {
+      return sampleData[_sampleIndex++];
+    }
   }
 }
 
@@ -24994,7 +25009,12 @@ module.exports = React.createClass({displayName: "exports",
       React.createElement("table", null, 
         React.createElement("thead", null, 
           React.createElement("tr", null, 
-            React.createElement("th", null, "Head")
+            React.createElement("th", null, "Time"), 
+            React.createElement("th", {title: "chloroform"}, "CHCl", React.createElement("sub", null, "3")), 
+            React.createElement("th", {title: "bromoform"}, "CHBr", React.createElement("sub", null, "3")), 
+            React.createElement("th", {title: "bromodichloromethane"}, "CHBrCl", React.createElement("sub", null, "2")), 
+            React.createElement("th", {title: "dibromochloromethane"}, "CBr", React.createElement("sub", null, "2"), "Cl", React.createElement("sub", null, "2")), 
+            React.createElement("th", null)
           )
         ), 
         React.createElement("tbody", null, 
@@ -25046,7 +25066,11 @@ module.exports = React.createClass({displayName: "exports",
   render: function() {
     return (
       React.createElement("tr", null, 
-        React.createElement("td", null, this.props.sample.id)
+        React.createElement("td", null, this.props.sample.clockTime), 
+        React.createElement("td", null, this.props.sample.getReadingFor('chloroform')), 
+        React.createElement("td", null, this.props.sample.getReadingFor('bromoform')), 
+        React.createElement("td", null, this.props.sample.getReadingFor('bromodichloromethane')), 
+        React.createElement("td", null, this.props.sample.getReadingFor('dibromochloromethane'))
       )
     );
   }

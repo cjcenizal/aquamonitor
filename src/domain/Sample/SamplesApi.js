@@ -13,7 +13,9 @@ function _getNextSample() {
   if (secondsElapsed >= THRESHOLD_SECONDS) {
     // Reset the timer and return the next sample.
     _startTime = new Date();
-    return sampleData[_sampleIndex++];
+    if (sampleData[_sampleIndex]) {
+      return sampleData[_sampleIndex++];
+    }
   }
 }
 
