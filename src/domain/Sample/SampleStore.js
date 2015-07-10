@@ -1,7 +1,9 @@
  'use strict';
 
+var Sample = require('./Sample');
+
 var AppDispatcher = require('../AppDispatcher');
-var AppActions = require('../AppActions');
+var AppActionTypes = require('../AppActionTypes');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 var _ = require('underscore');
@@ -9,21 +11,41 @@ var _ = require('underscore');
 var CHANGE_EVENT = 'change';
 
 var _samples = [];
+var _page = 0;
+var SAMPLES_PER_PAGE = 10;
 
-function _addSample(sample) {
+function _addSample(sampleData) {
+  var sample = new Sample(
+    sampleData.id,
+    sampleData.time,
+    sampleData.activeAlert,
+    sampleData.readings
+  );
+  _samples.push(sample);
+}
+
+function _setAlertOnSample(sampleId) {
 
 }
 
-function _setAlertOnSample(sample) {
+function _hasNextPage() {
+  return _samples.length > (_page + 1) * SAMPLES_PER_PAGE;
+}
 
+function _hasPreviousPage() {
+  return _page > 0;
 }
 
 function _pageNext() {
-
+  if (_hasNextPage()) {
+    _page++;
+  }
 }
 
 function _pagePrevious() {
-  
+  if (_hasPreviousPage()) {
+    _page--;
+  }
 }
 
 var SampleStore = assign({}, EventEmitter.prototype, {
@@ -40,8 +62,14 @@ var SampleStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
+  hasNextPage: _hasNextPage,
+
+  hasPreviousPage: _hasPreviousPage,
+
   getSamples: function() {
-    return _samples;
+    var index = _page * SAMPLES_PER_PAGE;
+    var endIndex = (_samples.length > index + SAMPLES_PER_PAGE) ? index + SAMPLES_PER_PAGE : _samples.length;
+    return _samples.slice(index, endIndex);
   }
 
 });
@@ -49,22 +77,22 @@ var SampleStore = assign({}, EventEmitter.prototype, {
 SampleStore.dispatchToken = AppDispatcher.register(function(action) {
   switch (action.type) {
 
-    case AppActions.SAMPLE_ADDED:
-      _addSample(action.sample);
+    case AppActionTypes.SAMPLE_ADDED:
+      _addSample(action.payload.sample);
       SampleStore.emitChange();
       break;
 
-    case AppActions.ALERT_ACTIVATED:
-      _setAlertOnSample(action.sample);
+    case AppActionTypes.ALERT_ACTIVATED:
+      _setAlertOnSampleWithId(action.payload.sampleId);
       SampleStore.emitChange();
       break;
 
-    case AppActions.NEXT_PAGED:
+    case AppActionTypes.NEXT_PAGED:
       _pageNext();
       SampleStore.emitChange();
       break;
 
-    case AppActions.PREVIOUS_PAGED:
+    case AppActionTypes.PREVIOUS_PAGED:
       _pagePrevious();
       SampleStore.emitChange();
       break;

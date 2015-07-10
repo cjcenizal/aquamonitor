@@ -1,7 +1,7 @@
  'use strict';
 
 var AppDispatcher = require('../AppDispatcher');
-var AppActions = require('../AppActions');
+var AppActionTypes = require('../AppActionTypes');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 var _ = require('underscore');
@@ -33,12 +33,12 @@ var AlertStore = assign({}, EventEmitter.prototype, {
 AlertStore.dispatchToken = AppDispatcher.register(function(action) {
   switch (action.type) {
 
-    case AppActions.ALERT_ACTIVATED:
+    case AppActionTypes.ALERT_ACTIVATED:
       _isAlert = true;
       AlertStore.emitChange();
       break;
 
-    case AppActions.ALERT_DEACTIVATED:
+    case AppActionTypes.ALERT_DEACTIVATED:
       _isAlert = false;
       AlertStore.emitChange();
       break;

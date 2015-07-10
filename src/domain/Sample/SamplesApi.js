@@ -3,9 +3,11 @@ var sampleData = require('./sampleData');
 
 var _sampleIndex = 0;
 var _startTime = new Date();
+
+var THRESHOLD_SECONDS = 1;
+
 function _getNextSample() {
   // Map 20 minutes in recorded time to a few seconds in real time.
-  var THRESHOLD_SECONDS = 4;
   var currentTime = new Date();
   var secondsElapsed = (currentTime - _startTime) / 1000;
   if (secondsElapsed >= THRESHOLD_SECONDS) {

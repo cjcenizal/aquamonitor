@@ -1,22 +1,22 @@
 'use strict';
 
 var AppDispatcher = require('../AppDispatcher');
-var AppActions = require('../AppActions');
+var AppActionTypes = require('../AppActionTypes');
 
 module.exports = {
 
-  activateAlert: function() {
+  activateAlert: function(sampleId) {
     AppDispatcher.dispatch({
-      type: AppActions.ALERT_ACTIVATED,
+      type: AppActionTypes.ALERT_ACTIVATED,
       payload: {
-        sample: response.sample
+        sampleId: sampleId
       }
     });
   },
 
   deactivateAlert: function() {
     AppDispatcher.dispatch({
-      type: AppActions.ALERT_DEACTIVATED
+      type: AppActionTypes.ALERT_DEACTIVATED
     });
   }
 

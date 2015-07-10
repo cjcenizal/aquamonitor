@@ -1,7 +1,7 @@
 'use strict';
 
 var AppDispatcher = require('../AppDispatcher');
-var AppActions = require('../AppActions');
+var AppActionTypes = require('../AppActionTypes');
 var SamplesApi = require('./SamplesApi');
 
 module.exports = {
@@ -9,7 +9,7 @@ module.exports = {
   fetchSamples: function() {
     SamplesApi.fetch().then(function(response) {
       AppDispatcher.dispatch({
-        type: AppActions.SAMPLE_ADDED,
+        type: AppActionTypes.SAMPLE_ADDED,
         payload: {
           sample: response.sample
         }
@@ -20,13 +20,13 @@ module.exports = {
 
   nextPage: function() {
     AppDispatcher.dispatch({
-      type: AppActions.NEXT_PAGED
+      type: AppActionTypes.NEXT_PAGED
     });
   },
 
   previousPage: function() {
     AppDispatcher.dispatch({
-      type: AppActions.PREVIOUS_PAGED
+      type: AppActionTypes.PREVIOUS_PAGED
     });
   }
 
