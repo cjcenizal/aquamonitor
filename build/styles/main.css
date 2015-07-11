@@ -1,0 +1,123 @@
+body {
+  margin: 0;
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-size: 16px; }
+
+/**
+ * 1. Center element in page.
+ */
+/**
+* 1. Tile image full-width.
+*/
+.wq-header {
+  position: relative;
+  background-image: url("../assets/images/water-tile.png");
+  /* 1 */
+  background-repeat: repeat-x;
+  /* 1 */
+  height: 240px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  /* 1 */
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  /* 1 */
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  /* 1 */ }
+
+/**
+ * 1. Align with rest of content.
+ * 2. Put image in background.
+ */
+.wq-header__content {
+  position: absolute;
+  top: 0;
+  left: calc(50% - 480px);
+  /* 1 */
+  background-image: url("../assets/images/water.png");
+  /* 2 */
+  background-size: 824px 240px;
+  /* 2 */
+  background-repeat: no-repeat;
+  /* 2 */
+  height: inherit;
+  padding: 0 50px;
+  /* 1 */
+  width: 860px;
+  /* 1 */
+  margin: 0 auto;
+  /* 1 */ }
+
+.wq-header__logo {
+  position: absolute;
+  left: 50px;
+  top: 140px;
+  width: 419px;
+  height: 50px;
+  background-image: url("../assets/images/logo.png");
+  background-size: 419px 50px;
+  background-repeat: no-repeat; }
+
+/**
+ * 1. Place above header.
+ */
+.wq-nav {
+  position: relative;
+  /* 1 */
+  z-index: 10;
+  /* 1 */
+  height: 40px;
+  background-color: rgba(23, 150, 207, 0.5);
+  border-top: 1px solid rgba(255, 255, 255, 0.5); }
+
+.wq-nav__content {
+  height: inherit;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 0 50px;
+  /* 1 */
+  width: 860px;
+  /* 1 */
+  margin: 0 auto;
+  /* 1 */ }
+
+.wq-nav__item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: inherit;
+  padding: 0 24px;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  border-left: 1px solid rgba(0, 0, 0, 0.5);
+  border-right: 1px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer; }
+  .wq-nav__item:first-child {
+    box-shadow: -1px 0 0 rgba(255, 255, 255, 0.5); }
+  .wq-nav__item:last-child {
+    box-shadow: 1px 0 0 rgba(0, 0, 0, 0.5); }
+
+.wq-body {
+  padding: 0 50px;
+  padding: 0 50px;
+  /* 1 */
+  width: 860px;
+  /* 1 */
+  margin: 0 auto;
+  /* 1 */ }

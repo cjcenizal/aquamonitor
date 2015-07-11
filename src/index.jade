@@ -23,19 +23,24 @@ html(
 
   body
 
-    .header
-      .logo
-        | Department of water quality
-      .nav
-        .nav__item Home
-        .nav__item Locations
-        .nav__item Help
+      .wq-header
 
-    //- Location
-    h1 LA Aqueduct Filtration Plant
+        .wq-header__content
+          .wq-header__logo(
+            alt="Department of Water Quality"
+          )
+        .wq-nav
+          .wq-nav__content
+            .wq-nav__item Home
+            .wq-nav__item Locations
+            .wq-nav__item Help
 
-    //- Water Quality app
-    #waterQualityApp
+      .wq-body
+        //- Location
+        h1 LA Aqueduct Filtration Plant
+
+        //- Water Quality app
+        #waterQualityApp
 
     script(
       src="/scripts/main.js"
