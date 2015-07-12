@@ -24470,7 +24470,7 @@ module.exports = [
   {
     "id": 35,
     "time": "2015-06-12T12:20:00.000Z",
-    "activeAlert": true,
+    "activeAlert": false,
     "readings": {
       "chloroform": 0.00995,
       "bromoform": 0.00995,
