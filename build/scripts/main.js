@@ -24893,8 +24893,8 @@ module.exports = [
 var React = require('react');
 
 // Define stores so they're available before the UI interacts with them.
-var SampleStore = require('./domain/Sample/SampleStore');
-var AlertStore = require('./domain/Alert/AlertStore');
+// var SampleStore = require('./domain/Sample/SampleStore');
+// var AlertStore = require('./domain/Alert/AlertStore');
 
 // Build + render app.
 var App = require('./ui/App/App');
@@ -24904,7 +24904,7 @@ React.render(
 );
 
 
-},{"./domain/Alert/AlertStore":165,"./domain/Sample/SampleStore":170,"./ui/App/App":176,"react":162}],174:[function(require,module,exports){
+},{"./ui/App/App":176,"react":162}],174:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -25017,7 +25017,6 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   render: function() {
-    console.log('alert', this.state.isAlert)
     return (
       React.createElement("div", null, 
         React.createElement(Alert, {
