@@ -54,12 +54,7 @@ AlertStore.dispatchToken = AppDispatcher.register(function(action) {
       _isAlert = true;
       AlertStore.emitChange();
       break;
-
-    case AppActionTypes.ALERT_DEACTIVATED:
-      _isAlert = false;
-      AlertStore.emitChange();
-      break;
-
+      
     default:
       // do nothing
   }

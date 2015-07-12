@@ -9,12 +9,6 @@ module.exports = {
     AppDispatcher.dispatch({
       type: AppActionTypes.ALERT_ACTIVATED
     });
-  },
-
-  deactivateAlert: function() {
-    AppDispatcher.dispatch({
-      type: AppActionTypes.ALERT_DEACTIVATED
-    });
   }
-
+  
 };
