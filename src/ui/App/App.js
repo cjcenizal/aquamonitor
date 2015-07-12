@@ -49,6 +49,7 @@ module.exports = React.createClass({
   },
 
   render: function() {
+    console.log('alert', this.state.isAlert)
     return (
       <div>
         <Alert

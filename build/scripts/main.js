@@ -23763,14 +23763,8 @@ module.exports = {
     AppDispatcher.dispatch({
       type: AppActionTypes.ALERT_ACTIVATED
     });
-  },
-
-  deactivateAlert: function() {
-    AppDispatcher.dispatch({
-      type: AppActionTypes.ALERT_DEACTIVATED
-    });
   }
-
+  
 };
 
 
@@ -23785,8 +23779,6 @@ var assign = require('object-assign');
 var _ = require('underscore');
 
 var CHANGE_EVENT = 'change';
-
-var _isAlert = false;
 
 var AlertStore = assign({}, EventEmitter.prototype, {
 
@@ -23803,15 +23795,15 @@ var AlertStore = assign({}, EventEmitter.prototype, {
   },
 
   isAlert: function() {
-    return _isAlert;
+    return SampleStore.getLatestSample().activeAlert;
   },
 
   isAlertable: function() {
-    if (_isAlert) {
+    if (this.isAlert()) {
       return false;
     }
     var latestSample = SampleStore.getLatestSample();
-    if (!latestSample || latestSample.state == 'default') {
+    if (!latestSample.state || latestSample.state == 'default') {
       return false;
     }
     return true;
@@ -23821,21 +23813,6 @@ var AlertStore = assign({}, EventEmitter.prototype, {
 
 AlertStore.dispatchToken = AppDispatcher.register(function(action) {
   switch (action.type) {
-
-    case AppActionTypes.SAMPLE_ADDED:
-      _isAlert = false;
-      AlertStore.emitChange();
-      break;
-
-    case AppActionTypes.ALERT_ACTIVATED:
-      _isAlert = true;
-      AlertStore.emitChange();
-      break;
-
-    case AppActionTypes.ALERT_DEACTIVATED:
-      _isAlert = false;
-      AlertStore.emitChange();
-      break;
 
     default:
       // do nothing
@@ -23854,7 +23831,6 @@ module.exports = keyMirror({
 
   SAMPLE_ADDED: null,
   ALERT_ACTIVATED: null,
-  ALERT_DEACTIVATED: null,
   NEXT_PAGED: null,
   PREVIOUS_PAGED: null
 
@@ -23980,6 +23956,7 @@ function _getLatestSample() {
   if (_samples.length) {
     return _samples[_samples.length - 1];
   }
+  return {};
 }
 
 function _hasNextPage() {
@@ -24493,7 +24470,7 @@ module.exports = [
   {
     "id": 35,
     "time": "2015-06-12T12:20:00.000Z",
-    "activeAlert": false,
+    "activeAlert": true,
     "readings": {
       "chloroform": 0.00995,
       "bromoform": 0.00995,
@@ -25040,6 +25017,7 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   render: function() {
+    console.log('alert', this.state.isAlert)
     return (
       React.createElement("div", null, 
         React.createElement(Alert, {

@@ -35,6 +35,7 @@ function _getLatestSample() {
   if (_samples.length) {
     return _samples[_samples.length - 1];
   }
+  return {};
 }
 
 function _hasNextPage() {

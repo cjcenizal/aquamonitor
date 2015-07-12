@@ -9,8 +9,6 @@ var _ = require('underscore');
 
 var CHANGE_EVENT = 'change';
 
-var _isAlert = false;
-
 var AlertStore = assign({}, EventEmitter.prototype, {
 
   emitChange: function() {
@@ -26,15 +24,15 @@ var AlertStore = assign({}, EventEmitter.prototype, {
   },
 
   isAlert: function() {
-    return _isAlert;
+    return SampleStore.getLatestSample().activeAlert;
   },
 
   isAlertable: function() {
-    if (_isAlert) {
+    if (this.isAlert()) {
       return false;
     }
     var latestSample = SampleStore.getLatestSample();
-    if (!latestSample || latestSample.state == 'default') {
+    if (!latestSample.state || latestSample.state == 'default') {
       return false;
     }
     return true;
@@ -45,16 +43,6 @@ var AlertStore = assign({}, EventEmitter.prototype, {
 AlertStore.dispatchToken = AppDispatcher.register(function(action) {
   switch (action.type) {
 
-    case AppActionTypes.SAMPLE_ADDED:
-      _isAlert = false;
-      AlertStore.emitChange();
-      break;
-
-    case AppActionTypes.ALERT_ACTIVATED:
-      _isAlert = true;
-      AlertStore.emitChange();
-      break;
-      
     default:
       // do nothing
   }
