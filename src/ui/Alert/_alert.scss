@@ -1,18 +1,18 @@
 .wq-alert {
+  display: none;
+  align-items: center;
   background-color: #fbb9b9;
   border-radius: 8px;
   padding: 20px;
-  display: flex;
-  align-items: center;
   margin-bottom: 24px;
+
+  &.is-alert-visible {
+    display: flex;
+  }
 }
 
   .wq-alert__icon {
-    width: 64px;
-    height: 58px;
-    background-image: url('../assets/images/alert.png');
-    background-size: 64px 58px;
-    background-repeat: no-repeat;
+    @include bg-image('alert', 64px, 58px);
   }
 
   .wq-alert__label {

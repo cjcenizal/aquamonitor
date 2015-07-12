@@ -2,10 +2,10 @@ var Q = require('q');
 var sampleData = require('./sampleData');
 
 var _isInitial = true;
-var _sampleIndex = 20;
+var _sampleIndex = 34;
 var _startTime = new Date();
 
-var THRESHOLD_SECONDS = 1;
+var THRESHOLD_SECONDS = 3;
 
 function _getNextSample() {
   // Bootstrap app with some data.

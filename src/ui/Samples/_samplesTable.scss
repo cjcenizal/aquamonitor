@@ -9,13 +9,14 @@
     color: white;
     font-size: 16px;
     font-weight: 700;
+    text-align: center;
   }
 
   .wq-samples-table-header,
   .wq-samples-table-cell {
     width: 150px;
-    text-align: center;
     height: 45px;
+    padding: 0 20px;
   }
 
   .wq-samples-table-header--primary {
@@ -38,6 +39,10 @@
   .wq-samples-table-cell {
     color: #333333;
     font-weight: 300 !important;
+    text-align: left;
+    & + & {
+      border-left-style: dotted;
+    }
     &.is-samples-table-cell-warning {
       background-color: #ffff94;
     }
@@ -46,3 +51,11 @@
       background-color: #ff9494;
     }
   }
+
+  .wq-samples-table-cell--primary {
+    text-align: left;
+  }
+
+.wq-samples-table-cell-alert {
+  @include bg-image('alert', 23px, 20px);
+}

@@ -1,7 +1,11 @@
+* {
+  box-sizing: border-box; }
+
 body {
   margin: 0;
   font-family: 'Open Sans', Arial, sans-serif;
-  font-size: 16px; }
+  font-size: 16px;
+  min-width: 960px; }
 
 /**
  * 1. Center element in page.
@@ -51,7 +55,7 @@ body {
   height: inherit;
   padding: 0 50px;
   /* 1 */
-  width: 860px;
+  width: 960px;
   /* 1 */
   margin: 0 auto;
   /* 1 */ }
@@ -86,7 +90,7 @@ body {
   display: flex;
   padding: 0 50px;
   /* 1 */
-  width: 860px;
+  width: 960px;
   /* 1 */
   margin: 0 auto;
   /* 1 */ }
@@ -117,7 +121,7 @@ body {
   padding: 0 50px;
   padding: 0 50px;
   /* 1 */
-  width: 860px;
+  width: 960px;
   /* 1 */
   margin: 0 auto;
   /* 1 */ }
@@ -131,18 +135,20 @@ body {
   background-repeat: no-repeat; }
 
 .wq-alert {
-  background-color: #fbb9b9;
-  border-radius: 8px;
-  padding: 20px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
+  display: none;
   -webkit-box-align: center;
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
+  background-color: #fbb9b9;
+  border-radius: 8px;
+  padding: 20px;
   margin-bottom: 24px; }
+  .wq-alert.is-alert-visible {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex; }
 
 .wq-alert__icon {
   width: 64px;
@@ -187,13 +193,14 @@ body {
   background-color: #5dbeec;
   color: white;
   font-size: 16px;
-  font-weight: 700; }
+  font-weight: 700;
+  text-align: center; }
 
 .wq-samples-table-header,
 .wq-samples-table-cell {
   width: 150px;
-  text-align: center;
-  height: 45px; }
+  height: 45px;
+  padding: 0 20px; }
 
 .wq-samples-table-header--primary {
   background-color: #95daf6;
@@ -210,11 +217,24 @@ body {
 
 .wq-samples-table-cell {
   color: #333333;
-  font-weight: 300 !important; }
+  font-weight: 300 !important;
+  text-align: left; }
+  .wq-samples-table-cell + .wq-samples-table-cell {
+    border-left-style: dotted; }
   .wq-samples-table-cell.is-samples-table-cell-warning {
     background-color: #ffff94; }
   .wq-samples-table-cell.is-samples-table-cell-danger {
     background-color: #ff9494; }
+
+.wq-samples-table-cell--primary {
+  text-align: left; }
+
+.wq-samples-table-cell-alert {
+  width: 23px;
+  height: 20px;
+  background-image: url("../assets/images/alert.png");
+  background-size: 23px 20px;
+  background-repeat: no-repeat; }
 
 .wq-samples-table-page-button {
   display: -webkit-box;

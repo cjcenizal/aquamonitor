@@ -11,9 +11,6 @@ var CHANGE_EVENT = 'change';
 
 var _isAlert = false;
 
-function _updateAlertable() {
-}
-
 var AlertStore = assign({}, EventEmitter.prototype, {
 
   emitChange: function() {
@@ -49,8 +46,7 @@ AlertStore.dispatchToken = AppDispatcher.register(function(action) {
   switch (action.type) {
 
     case AppActionTypes.SAMPLE_ADDED:
-      AppDispatcher.waitFor([SampleStore.dispatchToken]);
-      _updateAlertable();
+      _isAlert = false;
       AlertStore.emitChange();
       break;
 

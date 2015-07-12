@@ -18,6 +18,12 @@ module.exports = React.createClass({
     };
     var headerClasses = classNames('wq-samples-table-cell--primary', classes);
     var cellClasses = classNames(classes);
+    var alert;
+    if (this.props.sample.activeAlert) {
+      alert = (
+        <div className="wq-samples-table-cell-alert"></div>
+      );
+    }
     return (
       <tr>
         <th className={headerClasses}>{this.props.sample.clockTime}</th>
@@ -25,7 +31,7 @@ module.exports = React.createClass({
         <td className={cellClasses}>{this.props.sample.getReadingFor('bromoform')}</td>
         <td className={cellClasses}>{this.props.sample.getReadingFor('bromodichloromethane')}</td>
         <td className={cellClasses}>{this.props.sample.getReadingFor('dibromochloromethane')}</td>
-        <td className={cellClasses}></td>
+        <td className={cellClasses}>{alert}</td>
       </tr>
     );
   }

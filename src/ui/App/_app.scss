@@ -1,12 +1,9 @@
-$wq-body-width: 960px;
-$wq-side-spacing: 50px;
-
 /**
  * 1. Center element in page.
  */
 @mixin wq-page-center {
   padding: 0 $wq-side-spacing; /* 1 */
-  width: $wq-body-width - $wq-side-spacing * 2; /* 1 */
+  width: $wq-body-width; /* 1 */
   margin: 0 auto; /* 1 */       
 }
 

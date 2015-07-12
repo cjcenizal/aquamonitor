@@ -1,7 +1,15 @@
+$wq-body-width: 960px;
+$wq-side-spacing: 50px;
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: 'Open Sans', Arial, sans-serif;
   font-size: 16px;
+  min-width: $wq-body-width;
 }
 
 @mixin bg-image($filename, $width, $height) {

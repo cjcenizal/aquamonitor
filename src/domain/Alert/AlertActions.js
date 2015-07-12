@@ -5,12 +5,9 @@ var AppActionTypes = require('../AppActionTypes');
 
 module.exports = {
 
-  activateAlert: function(sampleId) {
+  activateAlert: function() {
     AppDispatcher.dispatch({
-      type: AppActionTypes.ALERT_ACTIVATED,
-      payload: {
-        sampleId: sampleId
-      }
+      type: AppActionTypes.ALERT_ACTIVATED
     });
   },
 

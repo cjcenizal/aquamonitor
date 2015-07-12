@@ -7,7 +7,8 @@ var classNames = require('classnames');
 module.exports = React.createClass({
 
   propTypes: {
-    isActive: ReactPropTypes.bool
+    isActive: ReactPropTypes.bool,
+    onClick: ReactPropTypes.func
   },
 
   render: function() {
@@ -16,7 +17,10 @@ module.exports = React.createClass({
     });
     return (
       <div className="wq-alert-button-container">
-        <div className={classes}>
+        <div 
+          className={classes}
+          onClick={this.props.onClick}
+        >
           Alert technicians
         </div>
       </div>

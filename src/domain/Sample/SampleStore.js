@@ -26,8 +26,15 @@ function _addSamples(sampleData) {
   });
 }
 
-function _setAlertOnSample(sampleId) {
+function _setAlertOnLatestSample() {
+  var sample = _getLatestSample();
+  sample.activeAlert = true;
+}
 
+function _getLatestSample() {
+  if (_samples.length) {
+    return _samples[_samples.length - 1];
+  }
 }
 
 function _hasNextPage() {
@@ -74,11 +81,7 @@ var SampleStore = assign({}, EventEmitter.prototype, {
     return _samples.slice(index, endIndex);
   },
 
-  getLatestSample: function() {
-    if (_samples.length) {
-      return _samples[_samples.length - 1];
-    }
-  }
+  getLatestSample: _getLatestSample
 
 });
 
@@ -91,7 +94,7 @@ SampleStore.dispatchToken = AppDispatcher.register(function(action) {
       break;
 
     case AppActionTypes.ALERT_ACTIVATED:
-      _setAlertOnSampleWithId(action.payload.sampleId);
+      _setAlertOnLatestSample();
       SampleStore.emitChange();
       break;
 

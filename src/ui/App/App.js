@@ -4,6 +4,7 @@ var Alert = require('../Alert/Alert');
 var Samples = require('../Samples/Samples');
 var AlertButton = require('../AlertButton/AlertButton');
 var AlertStore = require('../../domain/Alert/AlertStore');
+var AlertActions = require('../../domain/Alert/AlertActions');
 var SampleStore = require('../../domain/Sample/SampleStore');
 var SampleActions = require('../../domain/Sample/SampleActions');
 
@@ -16,6 +17,7 @@ function _getStateFromStores() {
     hasNextPage: SampleStore.hasNextPage(),
     hasPreviousPage: SampleStore.hasPreviousPage(),
     samples: SampleStore.getSamples(),
+    isAlert: AlertStore.isAlert(),
     isAlertable: AlertStore.isAlertable()
   };
 }
@@ -31,6 +33,7 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function() {
+    AlertStore.addChangeListener(this.onChange);
     SampleStore.addChangeListener(this.onChange);
     // Poll for new samples.
     pollToken = setInterval(function() {
@@ -48,7 +51,9 @@ module.exports = React.createClass({
   render: function() {
     return (
       <div>
-        <Alert />
+        <Alert
+          isVisible={this.state.isAlert}
+        />
         <Samples
           samples={this.state.samples}
           hasNextPage={this.state.hasNextPage}
@@ -56,9 +61,14 @@ module.exports = React.createClass({
         />
         <AlertButton
           isActive={this.state.isAlertable}
+          onClick={this.onAlertButtonClick}
         />
       </div>
     );
+  },
+
+  onAlertButtonClick: function() {
+    AlertActions.activateAlert();
   }
 
 });
