@@ -23871,7 +23871,7 @@ module.exports = {
       AppDispatcher.dispatch({
         type: AppActionTypes.SAMPLE_ADDED,
         payload: {
-          sample: response.sample
+          samples: response.samples
         }
       });
     }, function(error) {
@@ -23910,14 +23910,16 @@ var _samples = [];
 var _page = 0;
 var SAMPLES_PER_PAGE = 10;
 
-function _addSample(sampleData) {
-  var sample = new Sample(
-    sampleData.id,
-    sampleData.time,
-    sampleData.activeAlert,
-    sampleData.readings
-  );
-  _samples.push(sample);
+function _addSamples(sampleData) {
+  _.each(sampleData, function(data) {
+    var sample = new Sample(
+      data.id,
+      data.time,
+      data.activeAlert,
+      data.readings
+    );
+    _samples.push(sample);
+  });
 }
 
 function _setAlertOnSample(sampleId) {
@@ -23974,7 +23976,7 @@ SampleStore.dispatchToken = AppDispatcher.register(function(action) {
   switch (action.type) {
 
     case AppActionTypes.SAMPLE_ADDED:
-      _addSample(action.payload.sample);
+      _addSamples(action.payload.samples);
       SampleStore.emitChange();
       break;
 
@@ -24005,12 +24007,22 @@ module.exports = SampleStore;
 var Q = require('q');
 var sampleData = require('./sampleData');
 
-var _sampleIndex = 0;
+var _isInitial = true;
+var _sampleIndex = 20;
 var _startTime = new Date();
 
 var THRESHOLD_SECONDS = 1;
 
 function _getNextSample() {
+  // Bootstrap app with some data.
+  if (_isInitial) {
+    _isInitial = false;
+    var data = [];
+    for (var i = 0; i < _sampleIndex; i++) {
+      data.push(sampleData[i]);
+    }
+    return data;
+  }
   // Map 20 minutes in recorded time to a few seconds in real time.
   var currentTime = new Date();
   var secondsElapsed = (currentTime - _startTime) / 1000;
@@ -24018,7 +24030,7 @@ function _getNextSample() {
     // Reset the timer and return the next sample.
     _startTime = new Date();
     if (sampleData[_sampleIndex]) {
-      return sampleData[_sampleIndex++];
+      return [sampleData[_sampleIndex++]];
     }
   }
 }
@@ -24031,7 +24043,7 @@ var SamplesApi = {
 
     if (nextSample) {
       deferred.resolve({
-        sample: nextSample
+        samples: nextSample
       });
     } else {
       deferred.reject(new Error('No sample available'));
@@ -24958,6 +24970,8 @@ module.exports = React.createClass({displayName: "exports",
     pollToken = setInterval(function() {
       SampleActions.fetchSamples();
     }, 1000);
+    // Get first batch of samples immediately.
+    SampleActions.fetchSamples();
   },
 
   componentWillUnmount: function() {

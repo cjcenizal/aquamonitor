@@ -34,6 +34,8 @@ module.exports = React.createClass({
     pollToken = setInterval(function() {
       SampleActions.fetchSamples();
     }, 1000);
+    // Get first batch of samples immediately.
+    SampleActions.fetchSamples();
   },
 
   componentWillUnmount: function() {

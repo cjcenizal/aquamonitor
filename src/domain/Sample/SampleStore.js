@@ -14,14 +14,16 @@ var _samples = [];
 var _page = 0;
 var SAMPLES_PER_PAGE = 10;
 
-function _addSample(sampleData) {
-  var sample = new Sample(
-    sampleData.id,
-    sampleData.time,
-    sampleData.activeAlert,
-    sampleData.readings
-  );
-  _samples.push(sample);
+function _addSamples(sampleData) {
+  _.each(sampleData, function(data) {
+    var sample = new Sample(
+      data.id,
+      data.time,
+      data.activeAlert,
+      data.readings
+    );
+    _samples.push(sample);
+  });
 }
 
 function _setAlertOnSample(sampleId) {
@@ -78,7 +80,7 @@ SampleStore.dispatchToken = AppDispatcher.register(function(action) {
   switch (action.type) {
 
     case AppActionTypes.SAMPLE_ADDED:
-      _addSample(action.payload.sample);
+      _addSamples(action.payload.samples);
       SampleStore.emitChange();
       break;
 

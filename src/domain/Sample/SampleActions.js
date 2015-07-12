@@ -11,7 +11,7 @@ module.exports = {
       AppDispatcher.dispatch({
         type: AppActionTypes.SAMPLE_ADDED,
         payload: {
-          sample: response.sample
+          samples: response.samples
         }
       });
     }, function(error) {
