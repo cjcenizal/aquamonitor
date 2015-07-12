@@ -11,13 +11,10 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    var WARNING_THRESHOLD = 0.04;
-    var ALERT_THRESHOLD = 0.08;
-    var total = this.props.sample.total;
     var classes = {
       'wq-samples-table-cell': true,
-      'is-samples-table-cell-warning': total > WARNING_THRESHOLD && total <= ALERT_THRESHOLD,
-      'is-samples-table-cell-danger': total > ALERT_THRESHOLD
+      'is-samples-table-cell-warning': this.props.sample.state == 'warning',
+      'is-samples-table-cell-danger': this.props.sample.state == 'danger'
     };
     var headerClasses = classNames('wq-samples-table-cell--primary', classes);
     var cellClasses = classNames(classes);

@@ -14,4 +14,11 @@
     padding: 8px 16px;
     margin: 28px auto;
     cursor: pointer;
+
+    &.is-alert-button-disabled {
+      background-color: #cccccc;
+      color: #999999;
+      border-color: #999999;
+      pointer-events: none;
+    }
   }

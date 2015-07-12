@@ -72,6 +72,12 @@ var SampleStore = assign({}, EventEmitter.prototype, {
     var index = _page * SAMPLES_PER_PAGE;
     var endIndex = (_samples.length > index + SAMPLES_PER_PAGE) ? index + SAMPLES_PER_PAGE : _samples.length;
     return _samples.slice(index, endIndex);
+  },
+
+  getLatestSample: function() {
+    if (_samples.length) {
+      return _samples[_samples.length - 1];
+    }
   }
 
 });

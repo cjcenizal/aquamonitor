@@ -2,6 +2,7 @@
 
 var AppDispatcher = require('../AppDispatcher');
 var AppActionTypes = require('../AppActionTypes');
+var SampleStore = require('../Sample/SampleStore');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 var _ = require('underscore');
@@ -9,6 +10,9 @@ var _ = require('underscore');
 var CHANGE_EVENT = 'change';
 
 var _isAlert = false;
+
+function _updateAlertable() {
+}
 
 var AlertStore = assign({}, EventEmitter.prototype, {
 
@@ -26,12 +30,29 @@ var AlertStore = assign({}, EventEmitter.prototype, {
 
   isAlert: function() {
     return _isAlert;
+  },
+
+  isAlertable: function() {
+    if (_isAlert) {
+      return false;
+    }
+    var latestSample = SampleStore.getLatestSample();
+    if (!latestSample || latestSample.state == 'default') {
+      return false;
+    }
+    return true;
   }
 
 });
 
 AlertStore.dispatchToken = AppDispatcher.register(function(action) {
   switch (action.type) {
+
+    case AppActionTypes.SAMPLE_ADDED:
+      AppDispatcher.waitFor([SampleStore.dispatchToken]);
+      _updateAlertable();
+      AlertStore.emitChange();
+      break;
 
     case AppActionTypes.ALERT_ACTIVATED:
       _isAlert = true;

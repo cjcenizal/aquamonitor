@@ -23756,6 +23756,7 @@ module.exports = require('./lib/React');
 
 var AppDispatcher = require('../AppDispatcher');
 var AppActionTypes = require('../AppActionTypes');
+var SampleStore = require('../Sample/SampleStore');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 var _ = require('underscore');
@@ -23763,6 +23764,9 @@ var _ = require('underscore');
 var CHANGE_EVENT = 'change';
 
 var _isAlert = false;
+
+function _updateAlertable() {
+}
 
 var AlertStore = assign({}, EventEmitter.prototype, {
 
@@ -23780,12 +23784,29 @@ var AlertStore = assign({}, EventEmitter.prototype, {
 
   isAlert: function() {
     return _isAlert;
+  },
+
+  isAlertable: function() {
+    if (_isAlert) {
+      return false;
+    }
+    var latestSample = SampleStore.getLatestSample();
+    if (!latestSample || latestSample.state == 'default') {
+      return false;
+    }
+    return true;
   }
 
 });
 
 AlertStore.dispatchToken = AppDispatcher.register(function(action) {
   switch (action.type) {
+
+    case AppActionTypes.SAMPLE_ADDED:
+      AppDispatcher.waitFor([SampleStore.dispatchToken]);
+      _updateAlertable();
+      AlertStore.emitChange();
+      break;
 
     case AppActionTypes.ALERT_ACTIVATED:
       _isAlert = true;
@@ -23805,7 +23826,7 @@ AlertStore.dispatchToken = AppDispatcher.register(function(action) {
 module.exports = AlertStore;
 
 
-},{"../AppActionTypes":165,"../AppDispatcher":166,"events":180,"object-assign":6,"underscore":163}],165:[function(require,module,exports){
+},{"../AppActionTypes":165,"../AppDispatcher":166,"../Sample/SampleStore":169,"events":180,"object-assign":6,"underscore":163}],165:[function(require,module,exports){
 'use strict';
 
 var keyMirror = require('keymirror');
@@ -23832,6 +23853,9 @@ module.exports = new Dispatcher();
 },{"flux":2}],167:[function(require,module,exports){
 var _ = require('underscore');
 
+var WARNING_THRESHOLD = 0.04;
+var ALERT_THRESHOLD = 0.08;
+    
 function Sample(id, time, activeAlert, readings) {
   this.id = id;
   this.time = new Date(time);
@@ -23849,6 +23873,12 @@ function Sample(id, time, activeAlert, readings) {
   this.total = _.reduce(this.readings, function(memo, value) {
     return memo + value;
   });
+  this.state = 'default';
+  if (this.total > WARNING_THRESHOLD && this.total <= ALERT_THRESHOLD) {
+    this.state = 'warning';
+  } else if (this.total > ALERT_THRESHOLD) {
+    this.state = 'danger';
+  }
 }
 
 Sample.prototype.getReadingFor = function(contaminant) {
@@ -23968,6 +23998,12 @@ var SampleStore = assign({}, EventEmitter.prototype, {
     var index = _page * SAMPLES_PER_PAGE;
     var endIndex = (_samples.length > index + SAMPLES_PER_PAGE) ? index + SAMPLES_PER_PAGE : _samples.length;
     return _samples.slice(index, endIndex);
+  },
+
+  getLatestSample: function() {
+    if (_samples.length) {
+      return _samples[_samples.length - 1];
+    }
   }
 
 });
@@ -24894,14 +24930,22 @@ module.exports = React.createClass({displayName: "exports",
 'use strict';
 
 var React = require('react');
+var ReactPropTypes = React.PropTypes;
 var classNames = require('classnames');
 
 module.exports = React.createClass({displayName: "exports",
 
+  propTypes: {
+    isActive: ReactPropTypes.bool
+  },
+
   render: function() {
+    var classes = classNames('wq-alert-button', {
+      'is-alert-button-disabled': !this.props.isActive
+    });
     return (
       React.createElement("div", {className: "wq-alert-button-container"}, 
-        React.createElement("div", {className: "wq-alert-button"}, 
+        React.createElement("div", {className: classes}, 
           "Alert technicians"
         )
       )
@@ -24916,33 +24960,11 @@ module.exports = React.createClass({displayName: "exports",
 var Alert = require('../Alert/Alert');
 var Samples = require('../Samples/Samples');
 var AlertButton = require('../AlertButton/AlertButton');
-
-var React = require('react');
-
-module.exports = React.createClass({displayName: "exports",
-
-  render: function() {
-    return (
-      React.createElement("div", null, 
-        React.createElement(Alert, null), 
-        React.createElement(Samples, null), 
-        React.createElement(AlertButton, null)
-      )
-    );
-  }
-
-});
-
-},{"../Alert/Alert":173,"../AlertButton/AlertButton":174,"../Samples/Samples":176,"react":162}],176:[function(require,module,exports){
-'use strict';
-
-var SamplesTable = require('./SamplesTable');
-var SamplesTablePageButton = require('./SamplesTablePageButton');
-var SampleActions = require('../../domain/Sample/SampleActions');
+var AlertStore = require('../../domain/Alert/AlertStore');
 var SampleStore = require('../../domain/Sample/SampleStore');
+var SampleActions = require('../../domain/Sample/SampleActions');
 
 var React = require('react');
-var classNames = require('classnames');
 
 var pollToken;
 
@@ -24950,7 +24972,8 @@ function _getStateFromStores() {
   return {
     hasNextPage: SampleStore.hasNextPage(),
     hasPreviousPage: SampleStore.hasPreviousPage(),
-    samples: SampleStore.getSamples()
+    samples: SampleStore.getSamples(),
+    isAlertable: AlertStore.isAlertable()
   };
 }
 
@@ -24982,17 +25005,54 @@ module.exports = React.createClass({displayName: "exports",
   render: function() {
     return (
       React.createElement("div", null, 
+        React.createElement(Alert, null), 
+        React.createElement(Samples, {
+          samples: this.state.samples, 
+          hasNextPage: this.state.hasNextPage, 
+          hasPreviousPage: this.state.hasPreviousPage}
+        ), 
+        React.createElement(AlertButton, {
+          isActive: this.state.isAlertable}
+        )
+      )
+    );
+  }
+
+});
+
+},{"../../domain/Alert/AlertStore":164,"../../domain/Sample/SampleActions":168,"../../domain/Sample/SampleStore":169,"../Alert/Alert":173,"../AlertButton/AlertButton":174,"../Samples/Samples":176,"react":162}],176:[function(require,module,exports){
+'use strict';
+
+var SamplesTable = require('./SamplesTable');
+var SamplesTablePageButton = require('./SamplesTablePageButton');
+var SampleActions = require('../../domain/Sample/SampleActions');
+
+var React = require('react');
+var ReactPropTypes = React.PropTypes;
+var classNames = require('classnames');
+
+module.exports = React.createClass({displayName: "exports",
+
+  propTypes: {
+    samples: ReactPropTypes.array,
+    hasPreviousPage: ReactPropTypes.bool,
+    hasNextPage: ReactPropTypes.bool
+  },
+
+  render: function() {
+    return (
+      React.createElement("div", null, 
         React.createElement(SamplesTablePageButton, {
           label: "view earlier samples", 
-          isActive: this.state.hasPreviousPage, 
+          isActive: this.props.hasPreviousPage, 
           onClick: this.onClickPreviousPage}
         ), 
         React.createElement(SamplesTable, {
-          samples: this.state.samples}
+          samples: this.props.samples}
         ), 
         React.createElement(SamplesTablePageButton, {
           label: "view later samples", 
-          isActive: this.state.hasNextPage, 
+          isActive: this.props.hasNextPage, 
           onClick: this.onClickNextPage, 
           isPointedDown: true}
         )
@@ -25010,7 +25070,7 @@ module.exports = React.createClass({displayName: "exports",
 
 });
 
-},{"../../domain/Sample/SampleActions":168,"../../domain/Sample/SampleStore":169,"./SamplesTable":177,"./SamplesTablePageButton":178,"classnames":1,"react":162}],177:[function(require,module,exports){
+},{"../../domain/Sample/SampleActions":168,"./SamplesTable":177,"./SamplesTablePageButton":178,"classnames":1,"react":162}],177:[function(require,module,exports){
 'use strict';
 
 var SamplesTableRow = require('./SamplesTableRow');
@@ -25103,13 +25163,10 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   render: function() {
-    var WARNING_THRESHOLD = 0.04;
-    var ALERT_THRESHOLD = 0.08;
-    var total = this.props.sample.total;
     var classes = {
       'wq-samples-table-cell': true,
-      'is-samples-table-cell-warning': total > WARNING_THRESHOLD && total <= ALERT_THRESHOLD,
-      'is-samples-table-cell-danger': total > ALERT_THRESHOLD
+      'is-samples-table-cell-warning': this.props.sample.state == 'warning',
+      'is-samples-table-cell-danger': this.props.sample.state == 'danger'
     };
     var headerClasses = classNames('wq-samples-table-cell--primary', classes);
     var cellClasses = classNames(classes);

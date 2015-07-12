@@ -3,44 +3,17 @@
 var SamplesTable = require('./SamplesTable');
 var SamplesTablePageButton = require('./SamplesTablePageButton');
 var SampleActions = require('../../domain/Sample/SampleActions');
-var SampleStore = require('../../domain/Sample/SampleStore');
 
 var React = require('react');
+var ReactPropTypes = React.PropTypes;
 var classNames = require('classnames');
-
-var pollToken;
-
-function _getStateFromStores() {
-  return {
-    hasNextPage: SampleStore.hasNextPage(),
-    hasPreviousPage: SampleStore.hasPreviousPage(),
-    samples: SampleStore.getSamples()
-  };
-}
 
 module.exports = React.createClass({
 
-  getInitialState: function() {
-    return _getStateFromStores();
-  },
-  
-  onChange: function() {
-    this.setState(_getStateFromStores());
-  },
-
-  componentDidMount: function() {
-    SampleStore.addChangeListener(this.onChange);
-    // Poll for new samples.
-    pollToken = setInterval(function() {
-      SampleActions.fetchSamples();
-    }, 1000);
-    // Get first batch of samples immediately.
-    SampleActions.fetchSamples();
-  },
-
-  componentWillUnmount: function() {
-    SampleStore.removeChangeListener(this.onChange);
-    clearInterval(pollToken);
+  propTypes: {
+    samples: ReactPropTypes.array,
+    hasPreviousPage: ReactPropTypes.bool,
+    hasNextPage: ReactPropTypes.bool
   },
 
   render: function() {
@@ -48,15 +21,15 @@ module.exports = React.createClass({
       <div>
         <SamplesTablePageButton
           label="view earlier samples"
-          isActive={this.state.hasPreviousPage}
+          isActive={this.props.hasPreviousPage}
           onClick={this.onClickPreviousPage}
         />
         <SamplesTable
-          samples={this.state.samples}
+          samples={this.props.samples}
         />
         <SamplesTablePageButton
           label="view later samples"
-          isActive={this.state.hasNextPage}
+          isActive={this.props.hasNextPage}
           onClick={this.onClickNextPage}
           isPointedDown={true}
         />

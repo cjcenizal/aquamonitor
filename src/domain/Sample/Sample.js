@@ -1,5 +1,8 @@
 var _ = require('underscore');
 
+var WARNING_THRESHOLD = 0.04;
+var ALERT_THRESHOLD = 0.08;
+    
 function Sample(id, time, activeAlert, readings) {
   this.id = id;
   this.time = new Date(time);
@@ -17,6 +20,12 @@ function Sample(id, time, activeAlert, readings) {
   this.total = _.reduce(this.readings, function(memo, value) {
     return memo + value;
   });
+  this.state = 'default';
+  if (this.total > WARNING_THRESHOLD && this.total <= ALERT_THRESHOLD) {
+    this.state = 'warning';
+  } else if (this.total > ALERT_THRESHOLD) {
+    this.state = 'danger';
+  }
 }
 
 Sample.prototype.getReadingFor = function(contaminant) {
