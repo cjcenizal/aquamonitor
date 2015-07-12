@@ -23830,6 +23830,8 @@ module.exports = new Dispatcher();
 
 
 },{"flux":2}],167:[function(require,module,exports){
+var _ = require('underscore');
+
 function Sample(id, time, activeAlert, readings) {
   this.id = id;
   this.time = new Date(time);
@@ -23844,6 +23846,9 @@ function Sample(id, time, activeAlert, readings) {
   this.clockTime = [hours, minutes].join(':');
   this.activeAlert = activeAlert;
   this.readings = readings;
+  this.total = _.reduce(this.readings, function(memo, value) {
+    return memo + value;
+  });
 }
 
 Sample.prototype.getReadingFor = function(contaminant) {
@@ -23852,7 +23857,7 @@ Sample.prototype.getReadingFor = function(contaminant) {
 
 module.exports = Sample;
 
-},{}],168:[function(require,module,exports){
+},{"underscore":163}],168:[function(require,module,exports){
 'use strict';
 
 var AppDispatcher = require('../AppDispatcher');
@@ -25016,15 +25021,15 @@ module.exports = React.createClass({displayName: "exports",
       )
     })
     return (
-      React.createElement("table", null, 
+      React.createElement("table", {className: "wq-samples-table"}, 
         React.createElement("thead", null, 
           React.createElement("tr", null, 
-            React.createElement("th", null, "Time"), 
-            React.createElement("th", {title: "chloroform"}, "CHCl", React.createElement("sub", null, "3")), 
-            React.createElement("th", {title: "bromoform"}, "CHBr", React.createElement("sub", null, "3")), 
-            React.createElement("th", {title: "bromodichloromethane"}, "CHBrCl", React.createElement("sub", null, "2")), 
-            React.createElement("th", {title: "dibromochloromethane"}, "CBr", React.createElement("sub", null, "2"), "Cl", React.createElement("sub", null, "2")), 
-            React.createElement("th", null)
+            React.createElement("th", {className: "wq-samples-table-header wq-samples-table-header--primary"}, "Time"), 
+            React.createElement("th", {className: "wq-samples-table-header", title: "chloroform"}, "CHCl", React.createElement("sub", null, "3")), 
+            React.createElement("th", {className: "wq-samples-table-header", title: "bromoform"}, "CHBr", React.createElement("sub", null, "3")), 
+            React.createElement("th", {className: "wq-samples-table-header", title: "bromodichloromethane"}, "CHBrCl", React.createElement("sub", null, "2")), 
+            React.createElement("th", {className: "wq-samples-table-header", title: "dibromochloromethane"}, "CBr", React.createElement("sub", null, "2"), "Cl", React.createElement("sub", null, "2")), 
+            React.createElement("th", {className: "wq-samples-table-header"})
           )
         ), 
         React.createElement("tbody", null, 
@@ -25084,13 +25089,24 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   render: function() {
+    var WARNING_THRESHOLD = 0.04;
+    var ALERT_THRESHOLD = 0.08;
+    var total = this.props.sample.total;
+    var classes = {
+      'wq-samples-table-cell': true,
+      'is-samples-table-cell-warning': total > WARNING_THRESHOLD && total <= ALERT_THRESHOLD,
+      'is-samples-table-cell-danger': total > ALERT_THRESHOLD
+    };
+    var headerClasses = classNames('wq-samples-table-cell--primary', classes);
+    var cellClasses = classNames(classes);
     return (
       React.createElement("tr", null, 
-        React.createElement("td", null, this.props.sample.clockTime), 
-        React.createElement("td", null, this.props.sample.getReadingFor('chloroform')), 
-        React.createElement("td", null, this.props.sample.getReadingFor('bromoform')), 
-        React.createElement("td", null, this.props.sample.getReadingFor('bromodichloromethane')), 
-        React.createElement("td", null, this.props.sample.getReadingFor('dibromochloromethane'))
+        React.createElement("th", {className: headerClasses}, this.props.sample.clockTime), 
+        React.createElement("td", {className: cellClasses}, this.props.sample.getReadingFor('chloroform')), 
+        React.createElement("td", {className: cellClasses}, this.props.sample.getReadingFor('bromoform')), 
+        React.createElement("td", {className: cellClasses}, this.props.sample.getReadingFor('bromodichloromethane')), 
+        React.createElement("td", {className: cellClasses}, this.props.sample.getReadingFor('dibromochloromethane')), 
+        React.createElement("td", {className: cellClasses})
       )
     );
   }

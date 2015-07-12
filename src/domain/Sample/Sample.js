@@ -1,3 +1,5 @@
+var _ = require('underscore');
+
 function Sample(id, time, activeAlert, readings) {
   this.id = id;
   this.time = new Date(time);
@@ -12,6 +14,9 @@ function Sample(id, time, activeAlert, readings) {
   this.clockTime = [hours, minutes].join(':');
   this.activeAlert = activeAlert;
   this.readings = readings;
+  this.total = _.reduce(this.readings, function(memo, value) {
+    return memo + value;
+  });
 }
 
 Sample.prototype.getReadingFor = function(contaminant) {
