@@ -7,7 +7,11 @@ module.exports = React.createClass({
 
   render: function() {
     return (
-      <button>Alert button</button>
+      <div className="wq-alert-button-container">
+        <div className="wq-alert-button">
+          Alert technicians
+        </div>
+      </div>
     );
   }
 

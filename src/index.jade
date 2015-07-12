@@ -24,11 +24,11 @@ html(
   body
 
       .wq-header
-
         .wq-header__content
           .wq-header__logo(
             alt="Department of Water Quality"
           )
+        //- Nav
         .wq-nav
           .wq-nav__content
             .wq-nav__item Home
@@ -37,7 +37,9 @@ html(
 
       .wq-body
         //- Location
-        h1 LA Aqueduct Filtration Plant
+        h1.wq-location-name(
+          alt="LA Aqueduct Filtration Plant"
+        )
 
         //- Water Quality app
         #waterQualityApp

@@ -1,0 +1,23 @@
+.wq-alert {
+  background-color: #fbb9b9;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+  .wq-alert__icon {
+    width: 64px;
+    height: 58px;
+    background-image: url('../assets/images/alert.png');
+    background-size: 64px 58px;
+    background-repeat: no-repeat;
+  }
+
+  .wq-alert__label {
+    color: #9a3333;
+    font-size: 25px;
+    font-weight: 700;
+    margin-left: 50px;
+  }

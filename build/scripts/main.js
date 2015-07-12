@@ -24862,7 +24862,12 @@ module.exports = React.createClass({displayName: "exports",
 
   render: function() {
     return (
-      React.createElement("div", null, "Alert")
+      React.createElement("div", {className: "wq-alert"}, 
+        React.createElement("div", {className: "wq-alert__icon"}), 
+        React.createElement("div", {className: "wq-alert__label"}, 
+          "Technicians at this location are currently on alert"
+        )
+      )
     );
   }
 
@@ -24878,7 +24883,11 @@ module.exports = React.createClass({displayName: "exports",
 
   render: function() {
     return (
-      React.createElement("button", null, "Alert button")
+      React.createElement("div", {className: "wq-alert-button-container"}, 
+        React.createElement("div", {className: "wq-alert-button"}, 
+          "Alert technicians"
+        )
+      )
     );
   }
 
@@ -24965,7 +24974,8 @@ module.exports = React.createClass({displayName: "exports",
         React.createElement(SamplesTablePageButton, {
           label: "view later samples", 
           isActive: this.state.hasNextPage, 
-          onClick: this.onClickNextPage}
+          onClick: this.onClickNextPage, 
+          isPointedDown: true}
         )
       )
     );
@@ -25037,13 +25047,23 @@ module.exports = React.createClass({displayName: "exports",
 
   propTypes: {
     onClick: ReactPropTypes.func,
-    label: ReactPropTypes.string
+    label: ReactPropTypes.string,
+    isPointedDown: ReactPropTypes.bool
   },
 
   render: function() {
+    var classes = classNames('wq-samples-table-page-button', {
+      'wq-samples-table-page-button--pointDown': this.props.isPointedDown,
+      'is-samples-table-page-button-disabled': !this.props.isActive
+    });
     return (
-      React.createElement("button", {onClick: this.props.onClick}, 
-        this.props.label
+      React.createElement("div", {
+        className: classes, 
+        onClick: this.props.onClick
+      }, 
+        React.createElement("div", {className: "wq-samples-table-page-button__arrow"}), 
+        React.createElement("div", {className: "wq-samples-table-page-button__label"}, this.props.label), 
+        React.createElement("div", {className: "wq-samples-table-page-button__arrow"})
       )
     );
   }

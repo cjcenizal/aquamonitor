@@ -7,7 +7,12 @@ module.exports = React.createClass({
 
   render: function() {
     return (
-      <div>Alert</div>
+      <div className="wq-alert">
+        <div className="wq-alert__icon"></div>
+        <div className="wq-alert__label">
+          Technicians at this location are currently on alert
+        </div>
+      </div>
     );
   }
 

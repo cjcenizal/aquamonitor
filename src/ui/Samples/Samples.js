@@ -56,6 +56,7 @@ module.exports = React.createClass({
           label="view later samples"
           isActive={this.state.hasNextPage}
           onClick={this.onClickNextPage}
+          isPointedDown={true}
         />
       </div>
     );
